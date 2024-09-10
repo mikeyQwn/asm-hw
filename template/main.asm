@@ -1,3 +1,6 @@
+; Воронов Михаил
+; М3О-335Б-21
+
 format PE Console
 
 entry start
