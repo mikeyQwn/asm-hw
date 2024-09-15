@@ -5,7 +5,6 @@ include 'C:\fasm\INCLUDE\win32a.inc'
 
 ; Макрос для создания кольцевого массива
 macro NewCircleArr NAME, SIZE {
-    section '.data' data readable writeable
     NAME db SIZE dup 0 ; Объявление самого массива
     NAME#_size equ SIZE ; Объявление размера массива
     NAME#_write_ptr dd 0 ; Указатель на позицию записи
