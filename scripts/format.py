@@ -3,6 +3,44 @@
 import sys
 from typing import Iterable
 
+jmp_conditions = [
+    "je",
+    "jz",
+    "jne",
+    "jnz",
+    "jg",
+    "jnle",
+    "jge",
+    "jnl",
+    "jl",
+    "jnge",
+    "jle",
+    "jng",
+    "je",
+    "jz",
+    "jne",
+    "jnz",
+    "ja",
+    "jnbe",
+    "jae",
+    "jnb",
+    "jb",
+    "jnae",
+    "jbe",
+    "jna",
+    "jxcz",
+    "jc",
+    "jnc",
+    "jo",
+    "jno",
+    "jp",
+    "jpe",
+    "jnp",
+    "jpo",
+    "js",
+    "jns",
+]
+
 
 def token_in_line(tokens: Iterable[str], s: str) -> bool:
     for token in tokens:
@@ -21,7 +59,7 @@ def get_offset(line: str, is_code: bool) -> int:
         return TABWIDTH * 0
     if len(stripped) > 0 and stripped[0] == ";":
         return TABWIDTH * 0
-    if token_in_line(("invoke", "call", "jmp"), line):
+    if token_in_line(("invoke", "call", "jmp", "ret", *jmp_conditions), line):
         return TABWIDTH * 1
     return TABWIDTH * 1 if not is_code else TABWIDTH * 2
 

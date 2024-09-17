@@ -18,4 +18,7 @@ for file in str(files, encoding="utf-8").splitlines():
         out_file.write(subscript)
         print(filename)
         with open(file) as in_file:
-            out_file.write(in_file.read())
+            formatted = subprocess.run(
+                ["python3", "scripts/format.py"], stdin=in_file, capture_output=True
+            ).stdout
+            out_file.write(str(formatted, encoding="utf-8"))
