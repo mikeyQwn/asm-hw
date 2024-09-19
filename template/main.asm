@@ -3,8 +3,19 @@ format PE Console
 entry start
 include 'C:\FASM\INCLUDE\win32a.inc'
 
+bits = 'db'
+
+macro create_msg id {
+	if id = 0
+	  out_msg db 'Hello, world: %d', 0xA, 0
+	end if
+	if id = 1
+	  out_msg db 'Hello, world1: %d', 0xA, 0
+	end if
+}
+
 section '.data' data readable writeable
-  out_msg db 'Hello, world: %d', 0xA, 0
+  create_msg 1
   out_msg_len = $ - out_msg
   buffer db 1024 dup 0
 
