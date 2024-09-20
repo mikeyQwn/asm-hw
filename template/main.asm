@@ -3,7 +3,7 @@ format PE Console
 entry start
 include 'C:\FASM\INCLUDE\win32a.inc'
 
-bits = 'db'
+bits = 1
 
 macro create_msg id {
 	if id = 0
@@ -15,7 +15,7 @@ macro create_msg id {
 }
 
 section '.data' data readable writeable
-  create_msg 1
+  create_msg bits
   out_msg_len = $ - out_msg
   buffer db 1024 dup 0
 

@@ -78,7 +78,7 @@ section '.data' data readable writeable
     read_fmt db "%c", 0xA, 0 ; Формат строки для printf
 
 ; Объявляем кольцевой массив 'arr' длинной 5 и размером элемента 1 байт
-NewCircleArr arr, 5, 2
+NewCircleArr arr, 5, 1
 
 section '.code' code readable executable
 start:
