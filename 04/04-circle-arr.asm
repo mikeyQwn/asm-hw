@@ -1,9 +1,13 @@
-format PE console
+; Программа для работы с кольцевым массивом
+
+; Назначение программы: создание макросов для создания записи и чтения данных из кольцевого массива.
+
+	format PE console
 entry start
 
 include 'C:\fasm\INCLUDE\win32a.inc'
 
-; Макрос для создания кольцевого массива
+; Макрос для создания кольцевого массива, принимает имя массива, размер и размер элемента
 macro NewCircleArr NAME, SIZE, ELEM_SIZE {
 	if ELEM_SIZE = 1
         NAME db SIZE dup 0 ; Объявление самого массива
@@ -50,7 +54,7 @@ macro CircleArr_read NAME {
 section '.data' data readable writeable
     read_fmt db "%c", 0xA, 0 ; Формат строки для printf
 
-; Объявляем кольцевой массив 'arr' размером 5 байт
+; Объявляем кольцевой массив 'arr' длинной 5 и размером элемента 1 байт
 NewCircleArr arr, 5, 1
 
 section '.code' code readable executable

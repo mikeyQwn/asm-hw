@@ -1,4 +1,4 @@
-CC=WINEDEBUG=-all wine ../fasm/FASM.EXE
+CC=wine ../fasm/FASM.EXE
 OUT=dist
 FNAME=main.exe
 
@@ -13,4 +13,4 @@ clean:
 	rm -rf $(OUT)/*.exe
 
 $(FNAME): $(OUT)
-	$(CC) 03-list-macro.asm $(OUT)/$(FNAME)
+	$(CC) 02-diff.asm $(OUT)/$(FNAME)
