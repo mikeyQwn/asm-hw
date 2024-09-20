@@ -30,7 +30,18 @@ macro NewCircleArr NAME, SIZE, ELEM_SIZE {
 ; Макрос для записи в кольцевой массив 
 macro CircleArr_write NAME, VAL {
     mov eax, [NAME#_write_ptr] ; Получаем текущую позицию записи
-    mov byte [NAME + eax * NAME#_elem_size], VAL ; Записываем значение в массив
+	if NAME#_elem_size = 1
+		mov byte [NAME + eax * NAME#_elem_size], VAL ; Записываем значение в массив
+	end if
+	if NAME#_elem_size = 2
+		mov word [NAME + eax * NAME#_elem_size], VAL ; Записываем значение в массив
+	end if
+	if NAME#_elem_size = 4
+		mov dword [NAME + eax * NAME#_elem_size], VAL ; Записываем значение в массив
+	end if
+	if NAME#_elem_size = 8
+		mov qword [NAME + eax * NAME#_elem_size], VAL ; Записываем значение в массив
+	end if
     inc eax ; Увеличиваем позицию записи
     cmp eax, NAME#_size ; Проверяем, не достигнут ли конец массива
     jb @f ; Если не достигнут, переходим к метке @f
@@ -42,7 +53,19 @@ macro CircleArr_write NAME, VAL {
 ; Макрос для чтения из кольцевого массива
 macro CircleArr_read NAME {
     mov eax, [NAME#_read_ptr] ; Получаем текущую позицию чтения
-    movzx eax, byte [NAME + eax * NAME#_elem_size] ; Читаем значение из массива
+
+	if NAME#_elem_size = 1
+		movzx eax, byte [NAME + eax * NAME#_elem_size] ; Читаем значение из массива
+	end if
+	if NAME#_elem_size = 2
+		movzx eax, word [NAME + eax * NAME#_elem_size] ; Читаем значение из массива
+	end if
+	if NAME#_elem_size = 4
+		movzx eax, dword [NAME + eax * NAME#_elem_size] ; Читаем значение из массива
+	end if
+	if NAME#_elem_size = 8
+		movzx eax, qword [NAME + eax * NAME#_elem_size] ; Читаем значение из массива
+	end if
     inc dword [NAME#_read_ptr] ; Увеличиваем позицию чтения
     cmp [NAME#_read_ptr], NAME#_size ; Проверяем, не достигнут ли конец массива
     jb @f ; Если не достигнут, переходим к метке @f
@@ -55,7 +78,7 @@ section '.data' data readable writeable
     read_fmt db "%c", 0xA, 0 ; Формат строки для printf
 
 ; Объявляем кольцевой массив 'arr' длинной 5 и размером элемента 1 байт
-NewCircleArr arr, 5, 1
+NewCircleArr arr, 5, 2
 
 section '.code' code readable executable
 start:
