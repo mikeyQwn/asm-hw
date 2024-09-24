@@ -1,7 +1,16 @@
 #include <inttypes.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+
+uint8_t get_cmp(uint16_t a, uint16_t b) {
+    if (a < b)
+        return 0;
+    if (a == b)
+        return 1;
+    return 2;
+}
 
 uint8_t get_type_by_cmps(uint8_t a, uint8_t b, uint8_t c) {
     const uint8_t LOOKUP[3][3][3] = {
@@ -29,8 +38,8 @@ uint8_t alternative_lookup(uint8_t a, uint8_t b, uint8_t c) {
         2, 2, 2, 4, 4,  4,  9,  8, 10, 5, 5, 5, 3, 3,
         3, 6, 6, 6, 12, 11, 13, 7, 7,  7, 1, 1, 1,
     };
-    const uint8_t a9 = a + a + a + a + a + a + a + a + a;
-    const uint8_t b3 = b + b + b;
+    const uint8_t a9 = (a << 3) + a;
+    const uint8_t b3 = (b << 1) + b;
     return LOOKUP[a9 + b3 + c];
 }
 
@@ -100,5 +109,20 @@ int main() {
         return 1;
     }
 
-    printf("The first byte is: %d\n", bytes[0]);
+    size_t ptr = 0;
+    while (ptr < file_size - 8) {
+        uint16_t sumA = bytes[ptr + 2] + bytes[ptr + 3];
+        uint16_t sumB = bytes[ptr + 2 + 4] + bytes[ptr + 3 + 4];
+        uint16_t sumC = bytes[ptr + 2 + 8] + bytes[ptr + 3 + 8];
+        uint8_t cmp_a = get_cmp(sumA, sumB);
+        uint8_t cmp_b = get_cmp(sumB, sumC);
+        uint8_t cmp_c = get_cmp(sumC, sumA);
+        printf("AMP measures are %02x, %02x, %02x\n", bytes[ptr],
+               bytes[ptr + 4], bytes[ptr + 8]);
+        printf("1 measure is %d\n", sumA);
+        printf("2 measure is %d\n", sumB);
+        printf("3 measure is %d\n", sumC);
+        printf("the type is %d\n", get_type_by_cmps(cmp_a, cmp_b, cmp_c));
+        ptr += 8;
+    }
 }
