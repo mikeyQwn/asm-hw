@@ -109,6 +109,10 @@ int main() {
         return 1;
     }
 
+    size_t no_entries = 0;
+    size_t expected_no_entries = (file_size / 4) / 2;
+    uint8_t *result = malloc(sizeof(*result) * expected_no_entries);
+
     size_t ptr = 0;
     while (ptr < file_size - 8) {
         uint16_t sumA = bytes[ptr + 2] + bytes[ptr + 3];
@@ -123,6 +127,10 @@ int main() {
         printf("2 measure is %d\n", sumB);
         printf("3 measure is %d\n", sumC);
         printf("the type is %d\n", get_type_by_cmps(cmp_a, cmp_b, cmp_c));
+        result[no_entries] = get_type_by_cmps(cmp_a, cmp_b, cmp_c);
         ptr += 8;
+        no_entries += 1;
     }
+
+    printf("No entries: %ld, expected: %ld", no_entries, expected_no_entries);
 }
