@@ -126,10 +126,17 @@ int main() {
         printf("1 measure is %d\n", sumA);
         printf("2 measure is %d\n", sumB);
         printf("3 measure is %d\n", sumC);
-        printf("the type is %d\n", get_type_by_cmps(cmp_a, cmp_b, cmp_c));
-        result[no_entries] = get_type_by_cmps(cmp_a, cmp_b, cmp_c);
+        printf("1 cmp is %d\n", cmp_a);
+        printf("2 cmp is %d\n", cmp_b);
+        printf("3 cmp is %d\n", cmp_c);
+        printf("the type is %d\n", alternative_lookup(cmp_a, cmp_b, cmp_c));
+        result[no_entries] = alternative_lookup(cmp_a, cmp_b, cmp_c);
         ptr += 8;
         no_entries += 1;
+    }
+
+    for (size_t ptr = 0; ptr < expected_no_entries; ptr += 1) {
+        printf("the type is %d\n", result[ptr]);
     }
 
     printf("No entries: %ld, expected: %ld", no_entries, expected_no_entries);

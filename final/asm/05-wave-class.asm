@@ -10,6 +10,7 @@ section '.data' readable writeable
         file_size_fmt db 'File size: %d bytes', 0xA, 0x0
         failed_to_read_file_msg db 'Failed to oread the file to a buffer', 0xA, 0x0
         byte_fmt db '%d', 0
+		index_value_fmt db '%d: %d', 0xA, 0
 
 section '.bss' readable writeable
         h_file dd ?
@@ -49,13 +50,27 @@ start:
 
         invoke printf, file_size_fmt, [file_size]
 
-        mov ecx, [file_size]
-        mov esi, [file_buffer]
-
         invoke CloseHandle, [h_file]
 
-        invoke Wc, [file_buffer], [file_size], [out_buffer]
-        invoke printf, file_size_fmt, eax
+        invoke Wc, [file_buffer], [file_size], out_buffer
+
+        mov ecx, [file_size]
+        shr ecx, 3
+
+		xor ebx, ebx
+print_loop:
+		movzx eax, byte[out_buffer + ebx]
+		push ecx
+
+		invoke printf, index_value_fmt, ebx, eax
+		add esp, 12
+
+		pop ecx
+		inc ebx
+
+
+		cmp ebx, ecx
+		jl print_loop
 
 exit:
         invoke ExitProcess, 0
@@ -75,8 +90,6 @@ mem_error:
 read_error:
         invoke printf, failed_to_read_file_msg
         invoke ExitProcess, 1
-
-
 
 
 section '.idata' import data readable writeable
